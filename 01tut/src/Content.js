@@ -1,37 +1,34 @@
-import { useState } from 'react'
+import { FaTrashAlt } from 'react-icons/fa'
 
-const Content = () => {
-  const [name, setName] = useState('Jack');
-
-  const [count, setCount] = useState(1);
-
-  const handleNameChange = () =>{
-      const names = ['Jack', 'Ryan', 'Sean'];
-      const int = Math.floor(Math.random()*3);
-      setName(names[int]);
-  } 
-  const handleCount = () =>{
-    const int = count+1;
-    setCount(int);
-} 
-
-  const handleClick = () => {
-    handleCount()
-    console.log(count)
-  }
-  const handleClick2 = (name) => {
-    console.log(`${name} was clicked`)
-  }
+const Content = ({items, handleCheck, handleDelete}) => {
 
 
   return (
     <main>
-        <p onDoubleClick={handleClick}>
-            Hello {name}!
-        </p>
-        <button onClick={handleNameChange}>Click to Change Name</button>
-        <button onClick={() => {handleClick('Jack')}}>Click It</button>
-        <button onClick={(e) => {handleClick2(e)}}>Click It</button>
+      {items.length ? (
+        <ul>
+          {items.map((item) => (
+            <li className="item" key={item.id}>
+              <input
+                type="checkbox"
+                onChange={() => {handleCheck(item.id)}}
+                checked={item.checked}
+              />
+              <label 
+              style={(item.checked)? { textDecoration:'line-through'} : null}
+                onDoubleClick={() => {handleCheck(item.id)}}
+              >{item.item}</label>
+              <FaTrashAlt
+                onClick={() => {handleDelete(item.id)}}
+                role="button" 
+                tabIndex="0"
+              />
+            </li>
+          ))}
+        </ul>
+      ):(
+        <p style={{ marginTop: '2rem' }}>Your list is empty!</p>
+      )}
     </main>
   )
 }
